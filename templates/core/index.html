@@ -1,0 +1,387 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TTSMaker Clone - Free Text to Speech Online. Convert text to speech with 100+ languages and 600+ AI voices.">
+    <meta name="keywords" content="text to speech, TTS, AI voice generator, free text to speech, online TTS, voice generator">
+    <title>TTSMaker - Free Text to Speech Online | AI Voice Generator</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <span class="logo-icon"><i class="fas fa-volume-up"></i></span>
+                    <span class="logo-text">TTSMaker</span>
+                </a>
+                <nav class="nav">
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/blog/" class="nav-link">Blog</a>
+                    <a href="/api-docs/" class="nav-link">API</a>
+                    <a href="/pricing/" class="nav-link nav-link-pro">PRO <span class="badge">NEW</span></a>
+                </nav>
+                <div class="header-actions">
+                    <div class="lang-selector">
+                        <button class="lang-btn" id="langToggle">
+                            <span class="lang-flag">🇺🇸</span> English <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="lang-dropdown" id="langDropdown">
+                            {% for lang in languages %}
+                            <a href="?lang={{ lang.code }}" class="lang-option" data-lang="{{ lang.code }}">
+                                <span class="lang-flag">{{ lang.flag }}</span> {{ lang.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Free Text to Speech Online</h1>
+            <p class="hero-subtitle">Convert text to natural-sounding speech with 100+ languages and 600+ AI voices. Free for commercial use.</p>
+        </div>
+    </section>
+
+    <!-- Main TTS Converter -->
+    <section class="converter-section">
+        <div class="container">
+            <div class="converter-card">
+                <!-- Step Indicator -->
+                <div class="steps-indicator">
+                    <div class="step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Enter text</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Select language & voice</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Convert to speech</span>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Listen & download</span>
+                    </div>
+                </div>
+
+                <!-- Text Input Area -->
+                <div class="text-input-area">
+                    <textarea 
+                        id="textInput" 
+                        class="text-input" 
+                        placeholder="Enter the text you want to convert to speech here..."
+                        maxlength="20000"
+                        rows="6"></textarea>
+                    <div class="text-toolbar">
+                        <div class="char-count">
+                            <span id="charCount">0</span> / <span id="charLimit">20,000</span> characters
+                        </div>
+                        <div class="toolbar-actions">
+                            <button class="tool-btn" onclick="clearText()" title="Clear text">
+                                <i class="fas fa-trash-alt"></i> Clear
+                            </button>
+                            <button class="tool-btn" onclick="pasteText()" title="Paste from clipboard">
+                                <i class="fas fa-paste"></i> Paste
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Selection -->
+                <div class="voice-selection-area">
+                    <div class="select-group">
+                        <label class="select-label">Language</label>
+                        <select id="languageSelect" class="custom-select">
+                            {% for lang in languages %}
+                            <option value="{{ lang.code }}" {% if lang.code == 'en' %}selected{% endif %}>
+                                {{ lang.flag }} {{ lang.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="select-group">
+                        <label class="select-label">Voice Style</label>
+                        <select id="voiceSelect" class="custom-select">
+                            <!-- Populated by JavaScript -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- More Settings (collapsible) -->
+                <div class="more-settings-toggle">
+                    <button class="settings-toggle-btn" id="settingsToggle">
+                        <i class="fas fa-sliders-h"></i> More Settings
+                        <i class="fas fa-chevron-down" id="settingsChevron"></i>
+                    </button>
+                </div>
+                <div class="more-settings" id="moreSettings" style="display: none;">
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="setting-label">Speaking Rate: <span id="speedValue">1.0x</span></label>
+                            <input type="range" id="speedSlider" class="range-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Volume: <span id="volumeValue">100%</span></label>
+                            <input type="range" id="volumeSlider" class="range-slider" min="10" max="200" step="5" value="100">
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Audio Format</label>
+                            <select id="audioFormat" class="custom-select small">
+                                <option value="mp3">MP3</option>
+                                <option value="wav">WAV</option>
+                                <option value="ogg">OGG</option>
+                                <option value="aac">AAC</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label class="setting-label">Emotion Style</label>
+                            <select id="emotionSelect" class="custom-select small">
+                                <option value="">Default (No Emotion)</option>
+                                {% for emotion in emotion_styles %}
+                                <option value="{{ emotion }}">{{ emotion|title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Convert Button -->
+                <div class="convert-action">
+                    <button id="convertBtn" class="convert-btn pulse-animation">
+                        <i class="fas fa-play-circle"></i> Convert to Speech
+                    </button>
+                    <p class="convert-hint">Free limit: {{ free_char_limit }} characters per week. Some voices support unlimited free use.</p>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loading-area" id="loadingArea" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Converting text to speech... <span id="loadingTimer">This may take a few moments.</span></p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <!-- Result Area -->
+                <div class="result-area" id="resultArea" style="display: none;">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <h3><i class="fas fa-check-circle" style="color: #10B981;"></i> Conversion Complete!</h3>
+                            <span class="result-time" id="resultTime"></span>
+                        </div>
+                        <div class="audio-player">
+                            <audio id="audioPlayer" controls class="audio-element">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                        <div class="result-actions">
+                            <a id="downloadBtn" class="action-btn download-btn" download>
+                                <i class="fas fa-download"></i> Download Audio
+                            </a>
+                            <button class="action-btn share-btn" onclick="copyShareLink()">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                            <button class="action-btn new-btn" onclick="resetConverter()">
+                                <i class="fas fa-redo"></i> New Conversion
+                            </button>
+                        </div>
+                        <div class="result-info">
+                            <span class="info-item"><i class="fas fa-text-width"></i> Characters: <strong id="resultChars">0</strong></span>
+                            <span class="info-item"><i class="fas fa-language"></i> Voice ID: <strong id="resultVoiceId">-</strong></span>
+                            <span class="info-item"><i class="fas fa-clock"></i> Expires in: <strong>2 hours</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Area -->
+                <div class="error-area" id="errorArea" style="display: none;">
+                    <div class="error-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p id="errorMessage"></p>
+                        <button class="action-btn new-btn" onclick="hideError()">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Scenarios -->
+    <section class="scenarios-section">
+        <div class="container">
+            <h2 class="section-title">Usage Scenarios</h2>
+            <p class="section-subtitle">TTSMaker's text to speech can be used for the following main purposes</p>
+            <div class="scenarios-grid">
+                <div class="scenario-card">
+                    <div class="scenario-icon"><i class="fas fa-video"></i></div>
+                    <h3>Video Dubbing</h3>
+                    <p>YouTube and TikTok voice generator. Generate AI voices for various scenarios widely used in video dubbing for platforms like YouTube and TikTok.</p>
+                </div>
+                <div class="scenario-card">
+                    <div class="scenario-icon"><i class="fas fa-book"></i></div>
+                    <h3>Audiobook Reading</h3>
+                    <p>Create and listen to audiobook content. Convert text into natural speech and easily create and enjoy audiobooks with immersive narration.</p>
+                </div>
+                <div class="scenario-card">
+                    <div class="scenario-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>Education & Training</h3>
+                    <p>Teaching and learning languages. Convert text to sound, help learn pronunciation, and support multiple languages for language learners.</p>
+                </div>
+                <div class="scenario-card">
+                    <div class="scenario-icon"><i class="fas fa-bullhorn"></i></div>
+                    <h3>Marketing & Advertising</h3>
+                    <p>Create voiceovers for video ads. Generate persuasive voice-overs to help marketers explain product features with high-quality audio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Fast Speech Synthesis</h3>
+                    <p>Powerful neural network inference model for rapid text-to-speech conversion in seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3>Free for Commercial Use</h3>
+                    <p>Use synthesized audio for any lawful purpose, including commercial use, with no fees.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-globe"></i></div>
+                    <h3>100+ Languages & 600+ Voices</h3>
+                    <p>Constantly updating to support more languages and voices, as well as new features.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-code"></i></div>
+                    <h3>Email & API Support</h3>
+                    <p>Comprehensive email support and text-to-speech API services for developers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">FAQs</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What is TTSMaker and how does it work?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>TTSMaker is an online text-to-speech tool, also known as an AI voice generator. It can convert text to audio, and you can play or download audio files. First, enter the text, then select the language and your preferred AI voice, and finally convert the text into speech.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Is TTSMaker free to use?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes, we offer a permanent free version for users, with 20,000 characters per week. Some voices support unlimited free use.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Can I use the generated audio for commercial purposes?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes, you can use it for commercial purposes free of charge. You have full usage rights to the generated audio, but you must comply with local laws.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Can I use TTSMaker audio on YouTube and TikTok?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes, you can use the audio generated by TTSMaker on platforms such as YouTube, TikTok, Podcasts, etc. Source attribution is not mandatory but appreciated.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section class="history-section">
+        <div class="container">
+            <h2 class="section-title">Conversion History</h2>
+            <p class="section-subtitle">For user privacy, all conversion history is valid for 30 minutes.</p>
+            <div class="history-list" id="historyList">
+                <p class="no-history" id="noHistory">No valid history records found in the last 30 minutes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="logo-icon"><i class="fas fa-volume-up"></i></span>
+                        <span class="logo-text">TTSMaker</span>
+                    </div>
+                    <p class="footer-desc">Free text-to-speech tool and AI voice generator supporting 100+ languages and 600+ AI voices.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="/">Home</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="/api-docs/">API Documentation</a>
+                    <a href="/pricing/">Pricing</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="/contact/">Contact Us</a>
+                    <a href="/faq/">FAQ</a>
+                    <a href="/privacy/">Privacy Policy</a>
+                    <a href="/terms/">Terms of Service</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Languages</h4>
+                    <div class="lang-grid">
+                        <a href="?lang=en">English</a>
+                        <a href="?lang=ar">العربية</a>
+                        <a href="?lang=zh">中文</a>
+                        <a href="?lang=es">Español</a>
+                        <a href="?lang=fr">Français</a>
+                        <a href="?lang=de">Deutsch</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TTSMaker Clone. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

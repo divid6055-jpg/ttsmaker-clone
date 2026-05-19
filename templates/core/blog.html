@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - TTSMaker Clone</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .blog-section { padding: 40px 24px 60px; max-width: 900px; margin: 0 auto; }
+        .blog-post { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: all 0.25s; }
+        .blog-post:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .blog-post h2 { font-size: 1.3rem; margin-bottom: 8px; color: #1f2937; }
+        .blog-post .date { font-size: 0.85rem; color: #9ca3af; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .blog-post p { color: #6b7280; line-height: 1.7; }
+        .blog-post .read-more { display: inline-block; margin-top: 12px; color: #6366f1; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <span class="logo-icon"><i class="fas fa-volume-up"></i></span>
+                    <span class="logo-text">TTSMaker</span>
+                </a>
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/blog/" class="nav-link active">Blog</a>
+                    <a href="/api-docs/" class="nav-link">API</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="blog-section">
+        <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 32px;">TTSMaker Blog</h1>
+
+        <div class="blog-post">
+            <h2>AI Text-to-Speech vs Traditional Text-to-Speech</h2>
+            <div class="date"><i class="far fa-calendar"></i> February 4, 2025</div>
+            <p>Discover the key differences between AI-powered text-to-speech and traditional TTS technology. Learn about naturalness, emotional expression, real-time generation, and customization options.</p>
+            <a href="#" class="read-more">Read More →</a>
+        </div>
+
+        <div class="blog-post">
+            <h2>How to Create Professional Voiceovers for YouTube Videos</h2>
+            <div class="date"><i class="far fa-calendar"></i> January 15, 2025</div>
+            <p>Learn how to use TTSMaker to create high-quality voiceovers for your YouTube content. Tips on voice selection, audio settings, and best practices for engaging narration.</p>
+            <a href="#" class="read-more">Read More →</a>
+        </div>
+
+        <div class="blog-post">
+            <h2>Top 10 Voice Styles for Educational Content</h2>
+            <div class="date"><i class="far fa-calendar"></i> December 20, 2024</div>
+            <p>Explore the best AI voices for educational videos, audiobooks, and online courses. Find the perfect voice for your learning materials.</p>
+            <a href="#" class="read-more">Read More →</a>
+        </div>
+
+        <div class="blog-post">
+            <h2>Multi-Emotion Voice Generation: The Next Frontier</h2>
+            <div class="date"><i class="far fa-calendar"></i> November 8, 2024</div>
+            <p>Discover how multi-emotion voice synthesis enables AI voices to express anger, sadness, excitement, and more. The future of natural speech generation.</p>
+            <a href="#" class="read-more">Read More →</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 TTSMaker Clone. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

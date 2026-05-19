@@ -1,0 +1,6 @@
+django>=4.2
+django-cors-headers>=4.0
+gTTS>=2.5
+edge-tts>=6.1
+pydub>=0.25
+requests>=2.31

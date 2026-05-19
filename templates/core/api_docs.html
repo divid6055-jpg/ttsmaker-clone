@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - TTSMaker Clone</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .api-docs-section { padding: 30px 24px 60px; max-width: 1000px; margin: 0 auto; }
+        .api-card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .api-card h2 { font-size: 1.35rem; color: #1f2937; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .method-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .method-get { background: #dbeafe; color: #2563eb; }
+        .method-post { background: #d1fae5; color: #059669; }
+        .api-url { background: #1f2937; color: #e5e7eb; padding: 12px 16px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.9rem; margin: 12px 0; word-break: break-all; }
+        .api-desc { color: #6b7280; font-size: 0.95rem; line-height: 1.7; margin: 10px 0; }
+        .param-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+        .param-table th { background: #f9fafb; padding: 10px 14px; text-align: left; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; }
+        .param-table td { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; color: #4b5563; }
+        .param-table .required { color: #ef4444; font-weight: 600; }
+        .param-table .optional { color: #9ca3af; }
+        pre.code-block { background: #1f2937; color: #e5e7eb; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; margin: 12px 0; }
+        pre.code-block .key { color: #93c5fd; }
+        pre.code-block .string { color: #86efac; }
+        pre.code-block .number { color: #fbbf24; }
+        pre.code-block .comment { color: #6b7280; }
+        .error-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 16px 0; }
+        .error-table th { background: #fef2f2; padding: 8px 12px; text-align: left; font-weight: 600; color: #991b1b; border-bottom: 2px solid #fecaca; }
+        .error-table td { padding: 8px 12px; border-bottom: 1px solid #f3f4f6; color: #4b5563; }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; color: #6366f1; font-weight: 500; margin-bottom: 24px; }
+        .back-link:hover { color: #4f46e5; }
+        .toc { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; margin-bottom: 28px; }
+        .toc h3 { margin-bottom: 12px; color: #1f2937; }
+        .toc a { display: block; padding: 6px 0; color: #6366f1; font-size: 0.92rem; }
+        .toc a:hover { color: #4f46e5; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <span class="logo-icon"><i class="fas fa-volume-up"></i></span>
+                    <span class="logo-text">TTSMaker</span>
+                </a>
+                <nav class="nav">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/blog/" class="nav-link">Blog</a>
+                    <a href="/api-docs/" class="nav-link active">API</a>
+                    <a href="/pricing/" class="nav-link nav-link-pro">PRO <span class="badge">NEW</span></a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="api-docs-section">
+        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to TTSMaker</a>
+        <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 8px;">TTSMaker API Documentation</h1>
+        <p style="color: #6b7280; margin-bottom: 32px;">RESTful API for text-to-speech conversion. Supports 100+ languages and 600+ AI voices.</p>
+
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <a href="#voice-list">1. Get Voice List</a>
+            <a href="#create-tts">2. Create TTS Order</a>
+            <a href="#token-status">3. Check Token Status</a>
+        </div>
+
+        <!-- Voice List -->
+        <div class="api-card" id="voice-list">
+            <h2><span class="method-badge method-get">GET</span> Get Voice List</h2>
+            <p class="api-desc">Retrieve a list of all available languages and voices with their IDs, character limits, and supported emotion styles.</p>
+            <div class="api-url">GET https://ttsmaker-clone.example.com/api/voices/?language=en</div>
+            
+            <h4 style="margin: 16px 0 8px;">Parameters</h4>
+            <table class="param-table">
+                <thead>
+                    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>language</td><td>string</td><td class="optional">Optional</td><td>Filter by language code (e.g., en, ar, zh, es, fr, de)</td></tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin: 16px 0 8px;">Response Example</h4>
+            <pre class="code-block">{
+  <span class="key">"error_code"</span>: <span class="number">0</span>,
+  <span class="key">"msg"</span>: <span class="string">"Query the list of voices successfully."</span>,
+  <span class="key">"language"</span>: <span class="string">"en"</span>,
+  <span class="key">"support_language_list"</span>: [<span class="string">"en"</span>, <span class="string">"ar"</span>, <span class="string">"zh"</span>, ...],
+  <span class="key">"voices_count"</span>: <span class="number">26</span>,
+  <span class="key">"voices_detailed_list"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="number">148</span>,
+      <span class="key">"name"</span>: <span class="string">"Alayna-United States Female"</span>,
+      <span class="key">"language"</span>: <span class="string">"en"</span>,
+      <span class="key">"text_characters_limit"</span>: <span class="number">20000</span>,
+      <span class="key">"unlimited"</span>: <span class="number">true</span>
+    }
+  ]
+}</pre>
+
+            <h4 style="margin: 16px 0 8px;">Supported Language Codes</h4>
+            <p class="api-desc">
+                <code>en</code>, <code>ar</code>, <code>zh</code>, <code>es</code>, <code>pt</code>, <code>de</code>, 
+                <code>fr</code>, <code>it</code>, <code>tr</code>, <code>ru</code>, <code>ja</code>, <code>ko</code>, 
+                <code>ms</code>, <code>th</code>, <code>vi</code>, <code>id</code>, <code>he</code>, <code>fi</code>, 
+                <code>sv</code>, <code>nb</code>, <code>da</code>, <code>hi</code>, <code>ro</code>, <code>hu</code>, 
+                <code>pl</code>, <code>nl</code>, <code>cs</code>, <code>uk</code>, <code>hr</code>, <code>el</code>, 
+                <code>sk</code>, <code>bg</code>, <code>sl</code>, <code>ca</code>, <code>ga</code>, <code>lt</code>, 
+                <code>fa</code>, <code>sw</code>, <code>bn</code>, <code>ur</code>, <code>ta</code>, <code>mr</code>, 
+                <code>te</code>, <code>gu</code>, <code>ml</code>, <code>kn</code>
+            </p>
+        </div>
+
+        <!-- Create TTS Order -->
+        <div class="api-card" id="create-tts">
+            <h2><span class="method-badge method-post">POST</span> Create TTS Order</h2>
+            <p class="api-desc">Submit a text-to-speech conversion order. Returns a temporary download URL for the generated audio file.</p>
+            <div class="api-url">POST https://ttsmaker-clone.example.com/api/tts/</div>
+
+            <h4 style="margin: 16px 0 8px;">Request Body (JSON)</h4>
+            <table class="param-table">
+                <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>text</td><td>string</td><td class="required">Required</td><td>Text to convert (max 20,000 chars for unlimited voices)</td></tr>
+                    <tr><td>voice_id</td><td>integer</td><td class="required">Required</td><td>Voice ID from the voice list</td></tr>
+                    <tr><td>audio_format</td><td>string</td><td class="required">Required</td><td>mp3, wav, ogg, aac, opus (default: mp3)</td></tr>
+                    <tr><td>audio_speed</td><td>float</td><td class="optional">Optional</td><td>Speed rate (0.5 - 2.0, default: 1.0)</td></tr>
+                    <tr><td>audio_volume</td><td>float</td><td class="optional">Optional</td><td>Volume level (0.1 - 2.0, default: 1.0)</td></tr>
+                    <tr><td>audio_pitch</td><td>float</td><td class="optional">Optional</td><td>Pitch adjustment (0.5 - 2.0, default: 1.0)</td></tr>
+                    <tr><td>audio_high_quality</td><td>integer</td><td class="optional">Optional</td><td>0 or 1 for high quality (default: 0)</td></tr>
+                    <tr><td>text_paragraph_pause_time</td><td>integer</td><td class="optional">Optional</td><td>Pause between paragraphs in ms (0-10000)</td></tr>
+                    <tr><td>emotion_style_key</td><td>string</td><td class="optional">Optional</td><td>Emotion style for supported voices</td></tr>
+                    <tr><td>emotion_intensity</td><td>float</td><td class="optional">Optional</td><td>Emotion intensity (0.1 - 2.0, default: 1.0)</td></tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin: 16px 0 8px;">Request Example</h4>
+            <pre class="code-block">curl -X POST https://ttsmaker-clone.example.com/api/tts/ \
+  -H "Content-Type: application/json" \
+  -d '<span class="key">{</span>
+  <span class="key">"text"</span>: <span class="string">"Hello, this is a test of text to speech."</span>,
+  <span class="key">"voice_id"</span>: <span class="number">148</span>,
+  <span class="key">"audio_format"</span>: <span class="string">"mp3"</span>,
+  <span class="key">"audio_speed"</span>: <span class="number">1.0</span>,
+  <span class="key">"audio_volume"</span>: <span class="number">1.0</span>,
+  <span class="key">"emotion_style_key"</span>: <span class="string">"cheerful"</span>
+<span class="key">}</span>'</pre>
+
+            <h4 style="margin: 16px 0 8px;">Success Response</h4>
+            <pre class="code-block">{
+  <span class="key">"error_code"</span>: <span class="number">0</span>,
+  <span class="key">"msg"</span>: <span class="string">"TTS Task Executed Successfully"</span>,
+  <span class="key">"tts_task_characters_count"</span>: <span class="number">45</span>,
+  <span class="key">"audio_download_url"</span>: <span class="string">"https://example.com/api/download/tts_12345.mp3"</span>,
+  <span class="key">"audio_file_format"</span>: <span class="string">"mp3"</span>,
+  <span class="key">"audio_file_expiration_timestamp"</span>: <span class="number">1723560282</span>
+}</pre>
+
+            <h4 style="margin: 16px 0 8px;">Error Codes</h4>
+            <table class="error-table">
+                <thead><tr><th>Error Code</th><th>Summary</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>-1</td><td>POST_FIELD_ERROR</td><td>Post data fields are incomplete</td></tr>
+                    <tr><td>-1</td><td>VOICE_ID_ERROR</td><td>Voice ID does not exist or is disabled</td></tr>
+                    <tr><td>-1</td><td>TEXT_LENGTH_ERROR</td><td>Text exceeds maximum character limit</td></tr>
+                    <tr><td>-1</td><td>ERROR_TTS_FAILED</td><td>Server-side conversion failure</td></tr>
+                    <tr><td>0</td><td></td><td>TTS Task Executed Successfully</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Token Status -->
+        <div class="api-card" id="token-status">
+            <h2><span class="method-badge method-get">GET</span> Check Token Status</h2>
+            <p class="api-desc">Retrieve information about character quota usage and account status.</p>
+            <div class="api-url">GET https://ttsmaker-clone.example.com/api/token-status/</div>
+
+            <h4 style="margin: 16px 0 8px;">Response Example</h4>
+            <pre class="code-block">{
+  <span class="key">"error_code"</span>: <span class="number">0</span>,
+  <span class="key">"msg"</span>: <span class="string">"Account status checked"</span>,
+  <span class="key">"account_status"</span>: {
+    <span class="key">"quota_characters"</span>: <span class="number">20000</span>,
+    <span class="key">"characters_used"</span>: <span class="number">500</span>,
+    <span class="key">"available_quota"</span>: <span class="number">19500</span>,
+    <span class="key">"subscription_period"</span>: <span class="string">"week"</span>
+  }
+}</pre>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="logo-icon"><i class="fas fa-volume-up"></i></span>
+                        <span class="logo-text">TTSMaker</span>
+                    </div>
+                    <p class="footer-desc">Free text-to-speech tool and AI voice generator.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="/">Home</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="/api-docs/">API Documentation</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="/contact/">Contact Us</a>
+                    <a href="/privacy/">Privacy Policy</a>
+                    <a href="/terms/">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TTSMaker Clone. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
