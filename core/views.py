@@ -101,6 +101,7 @@ def index(request):
         "free_char_limit": settings.FREE_DAILY_CHAR_LIMIT,
         "max_chars_per_request": settings.MAX_CHARS_PER_REQUEST,
         "supported_formats": sorted(supported_formats()),
+        "supported_formats_json": json.dumps(sorted(supported_formats())),
         "ffmpeg_available": ffmpeg_available(),
         "rtl_languages_json": json.dumps(sorted(RTL_LANGUAGES)),
     }

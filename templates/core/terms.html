@@ -1,16 +1,36 @@
-{% load static %}
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Terms of Service - TTSMaker</title>
-<link rel="stylesheet" href="{% static 'css/style.css' %}"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>.pp{padding:40px 24px 60px;max-width:800px;margin:0 auto;}.pp h1{font-size:2rem;font-weight:800;margin-bottom:24px;}.pp h2{font-size:1.25rem;margin:24px 0 12px;color:#1f2937;}.pp p{color:#6b7280;line-height:1.8;margin-bottom:12px;}</style></head>
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms — TTSMaker Clone</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 <body>
-<header class="header"><div class="container"><div class="header-inner"><a href="/" class="logo"><span class="logo-icon"><i class="fas fa-volume-up"></i></span><span class="logo-text">TTSMaker</span></a>
-<nav class="nav"><a href="/" class="nav-link">Home</a><a href="/api-docs/" class="nav-link">API</a></nav></div></div></header>
-<section class="pp"><h1>Terms of Service</h1>
-<p>Last updated: January 2024</p>
-<h2>1. Acceptable Use</h2><p>You may use TTSMaker for any lawful purpose. You must comply with all applicable local, national, and international laws.</p>
-<h2>2. Free Usage Limits</h2><p>Free users are limited to 20,000 characters per week. Some voices support unlimited free use. We reserve the right to modify these limits.</p>
-<h2>3. Ownership of Generated Content</h2><p>You own all audio files generated through the service. You may use them for commercial purposes without attribution.</p>
-<h2>4. Service Availability</h2><p>We strive to maintain high availability but do not guarantee uninterrupted service. We reserve the right to modify or discontinue the service.</p>
-</section>
-<footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2024 TTSMaker Clone.</p></div></div></footer>
-</body></html>
+<header class="header"><div class="container header-inner">
+    <a class="logo" href="/"><span class="logo-icon"><i class="fas fa-volume-up"></i></span><span class="logo-text">TTSMaker</span></a>
+    <nav class="nav"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/api-docs/">API</a></nav>
+</div></header>
+
+<main class="container" style="padding:2rem 0 3rem; max-width:800px;">
+    <h1>Terms of Use</h1>
+    <p>This is an open-source educational clone of TTSMaker. It is provided "as is", without warranty of any kind.</p>
+
+    <h2>Acceptable use</h2>
+    <ul>
+        <li>Do not use this service to produce illegal content, harassment, impersonation, or any content that violates the rights of others.</li>
+        <li>Respect the per-IP daily quota and rate limits. Automated abuse will be blocked.</li>
+        <li>You are responsible for the text you submit and for how you use the generated audio.</li>
+    </ul>
+
+    <h2>Upstream services</h2>
+    <p>This app uses Microsoft's <code>edge-tts</code> service and Google's <code>gTTS</code> as a fallback. Their respective terms apply when you trigger a synthesis request.</p>
+
+    <h2>No SLA</h2>
+    <p>The reference deployment is offered without a service-level agreement. Operators of self-hosted instances may publish their own terms.</p>
+</main>
+
+<footer class="footer"><div class="container"><p><a href="/">Home</a> · <a href="/privacy/">Privacy</a></p></div></footer>
+</body>
+</html>
