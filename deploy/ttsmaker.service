@@ -1,0 +1,25 @@
+; Sample systemd unit for running TTSMaker Clone with gunicorn.
+; Copy to /etc/systemd/system/ttsmaker.service and edit paths/User accordingly.
+[Unit]
+Description=TTSMaker Clone (gunicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/ttsmaker-clone
+EnvironmentFile=/opt/ttsmaker-clone/.env
+ExecStart=/opt/ttsmaker-clone/.venv/bin/gunicorn ttsmaker_clone.wsgi:application \
+    --workers 3 --threads 2 \
+    --bind 127.0.0.1:8000 \
+    --access-logfile - --error-logfile -
+Restart=on-failure
+RestartSec=5s
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
